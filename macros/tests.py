@@ -19,7 +19,8 @@ def make_parser(template_string):
 
 
 # Tests for repeatedblocks.py
-from .templatetags.repeatedblocks import set_repeated_blocks, BlockNode
+from .templatetags.repeatedblocks import set_repeated_blocks
+from django.template.loader_tags import BlockNode
 
 class RepeatedBlocksTagsTests(TestCase):
 
