@@ -3,6 +3,11 @@ from django import template
 from django.template import Template, Context
 from django.shortcuts import render_to_response
 
+import unittest
+if not hasattr(unittest.TestCase, "assertRaisesRegex"):
+    # Python 2.7 compatibility
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 # Parser creation factory for testing
 import django.template.base as template_base
 
@@ -156,7 +161,7 @@ class RepeatedBlocksTagsTests(TestCase):
         """ If the repeat tag comes before the repeated
         block tag, it should throw an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^No repeated block .+ tag was found before the .+ tag$",
             Template,
@@ -169,7 +174,7 @@ class RepeatedBlocksTagsTests(TestCase):
         definition existing, than repeat should throw an
         exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^No repeated block .+ tag was found before the .+ tag$",
             Template,
@@ -181,7 +186,7 @@ class RepeatedBlocksTagsTests(TestCase):
         the corresponding name existing, than repeat should
         throw an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^No repeated block {0} tag was found before the .+ tag$".format(
                 self.RBLOCK_2_NAME),
@@ -194,7 +199,7 @@ class RepeatedBlocksTagsTests(TestCase):
         """ repeated_block should throw an exception when
         called without arguments.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag takes only one argument$",
             Template,
@@ -204,7 +209,7 @@ class RepeatedBlocksTagsTests(TestCase):
         """ repeated_block should throw an exception when
         called with too many arguments.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag takes only one argument$",
             Template,
@@ -214,7 +219,7 @@ class RepeatedBlocksTagsTests(TestCase):
         """ repeat should throw an exception when
         called without arguments.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag takes only one argument$",
             Template,
@@ -224,7 +229,7 @@ class RepeatedBlocksTagsTests(TestCase):
         """ repeat should throw an exception when
         called with too many arguments.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag takes only one argument$",
             Template,
@@ -691,9 +696,9 @@ class MacrosTests(TestCase):
         """ when the macro tag doesn't have an end tag,
         it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
-            r"^Unclosed tag .+\. Looking for one of: .+$",
+            r"^Unclosed tag",
             Template,
             self.LOAD_MACROS + "{% macro macro_name %}some text")
 
@@ -701,7 +706,7 @@ class MacrosTests(TestCase):
         """ A macro tag without a macro name should raise
         a too few arguments exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires at least one argument \(macro name\)$",
             Template,
@@ -712,7 +717,7 @@ class MacrosTests(TestCase):
         is malformed.
         """
         # quotes around the arg definition
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -720,7 +725,7 @@ class MacrosTests(TestCase):
             "{% endmacro %}")
 
         # end quote on the arg definition
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -732,7 +737,7 @@ class MacrosTests(TestCase):
         is malformed.
         """
         # default value not entirely in quotes
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -740,7 +745,7 @@ class MacrosTests(TestCase):
             "{% endmacro %}")
 
         # keyword in quotes
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -767,7 +772,7 @@ class MacrosTests(TestCase):
         the macro tag should raise a malformed arguments exception.
         """
         # use filter on template variable
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -775,7 +780,7 @@ class MacrosTests(TestCase):
             "{% endmacro %}")
 
         # use filter on hard-coded string
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -786,7 +791,7 @@ class MacrosTests(TestCase):
         """ If the loadmacros tag is called without a filename,
         it should raise a template syntax error.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires exactly one argument \(filename\)$",
             Template,
@@ -796,7 +801,7 @@ class MacrosTests(TestCase):
         """ If the loadmacros tag is called with two or more
         arguments, it should raise an error.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires exactly one argument \(filename\)$",
             Template,
@@ -810,7 +815,7 @@ class MacrosTests(TestCase):
         template syntax error.
         """
         # malformed argument: no quotes
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed argument to the .+ template tag. "
                  "Argument must be in quotes.$",
@@ -818,7 +823,7 @@ class MacrosTests(TestCase):
             self.LOAD_MACROS +
                 "{% loadmacros macros/tests/testmacros.html %}")
         # malformed argument: mismatched quotes ("')
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed argument to the .+ template tag. "
                  "Argument must be in quotes.$",
@@ -826,7 +831,7 @@ class MacrosTests(TestCase):
             self.LOAD_MACROS +
                 "{% loadmacros \"macros/tests/testmacros.html' %}")
         # malformed argument: mismatched quotes ('")
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed argument to the .+ template tag. "
                  "Argument must be in quotes.$",
@@ -834,7 +839,7 @@ class MacrosTests(TestCase):
             self.LOAD_MACROS +
                 "{% loadmacros 'macros/tests/testmacros.html\" %}")
         # malformed argument: only one quote
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed argument to the .+ template tag. "
                  "Argument must be in quotes.$",
@@ -846,7 +851,7 @@ class MacrosTests(TestCase):
         """ if use_macro is called without any arguments, it
         raises an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires at least one argument \(macro name\)$",
             Template,
@@ -857,7 +862,7 @@ class MacrosTests(TestCase):
         or with the macro definition after use_macro, then it
         should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Macro .+ is not defined previously to the .+ tag$",
             Template,
@@ -867,7 +872,7 @@ class MacrosTests(TestCase):
         """ if use_macro comes before the definition of the macro
         it uses, then it should throw an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Macro .+ is not defined previously to the .+ tag$",
             Template,
@@ -879,7 +884,7 @@ class MacrosTests(TestCase):
         raise an exception.
         """
         # malformed arg
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -887,7 +892,7 @@ class MacrosTests(TestCase):
                 "{% use_macro macro3 'foo'o %}")
         
         # malformed kwarg
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Malformed arguments to the .+ tag.$",
             Template,
@@ -898,7 +903,7 @@ class MacrosTests(TestCase):
         """ if macro_block is called without a macro_name, it should
         raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"macro_block tag requires at least one argument \(macro name\)",
             Template,
@@ -909,7 +914,7 @@ class MacrosTests(TestCase):
         """ if macro_block is called before a macro's definition,
         it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Macro .+ is not defined previously to the .+ tag$",
             Template,
@@ -920,7 +925,7 @@ class MacrosTests(TestCase):
         """ if macro_block is called on a macro that hasn't
         been defined, then it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^Macro .+ is not defined previously to the .+ tag$",
             Template,
@@ -930,7 +935,7 @@ class MacrosTests(TestCase):
         """ if the macro_block is passed the same keyword
         argument twice, it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ template tag was supplied "
             r"the same keyword argument multiple times.$",
@@ -950,7 +955,7 @@ class MacrosTests(TestCase):
         argument not defined in its macro, it should raise
         an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ template tag was supplied with a "
             r"keyword argument not defined by the .+ macro.$",
@@ -969,7 +974,7 @@ class MacrosTests(TestCase):
 ##        not wrapped in an arg or kwarg tag, it should raise
 ##        an exception.
 ##        """
-##        self.assertRaisesRegexp(
+##        self.assertRaisesRegex(
 ##            template.TemplateSyntaxError,
 ##            r"^.+ template tag received an argument that "
 ##            r"is neither a arg or a kwarg tag. Make sure there's "
@@ -988,7 +993,7 @@ class MacrosTests(TestCase):
 ##        a direct descendent of it that is not an arg or
 ##        kwarg tag, it should raise an exception.
 ##        """
-##        self.assertRaisesRegexp(
+##        self.assertRaisesRegex(
 ##            template.TemplateSyntaxError,
 ##            r"^.+ template tag received an argument that "
 ##            r"is neither a arg or a kwarg tag. Make sure there's "
@@ -1006,7 +1011,7 @@ class MacrosTests(TestCase):
         """ if macro_block is called with more args than
         defined in its macro, it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ template tag was supplied too many "
             r"arg block tags.$",
@@ -1025,7 +1030,7 @@ class MacrosTests(TestCase):
         """ if macro_kwarg tag is called with too few arguments,
         it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires exactly one argument, a keyword$",
             Template,
@@ -1040,7 +1045,7 @@ class MacrosTests(TestCase):
         """ if macro_kwarg tag is called with too many arguments,
         it should raise an exception.
         """
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             template.TemplateSyntaxError,
             r"^.+ tag requires exactly one argument, a keyword$",
             Template,
