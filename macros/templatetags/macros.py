@@ -46,6 +46,7 @@ class DefineMacroNode(template.Node):
         self.nodelist = nodelist
         self.args = args
         self.kwargs = kwargs
+        self.kwresolved = None
 
     def render(self, context):
         # convert template variable defaults into resolved
@@ -200,6 +201,12 @@ class UseMacroNode(template.Node):
                 context[arg] = template_variable.resolve(context)
             except IndexError:
                 context[arg] = ""
+
+        # if the macro wasn't rendered yet, make it so.
+        # this might have happened because the macro was outside
+        # of any {% block %} tags in a template that used inheritance
+        if self.macro.kwresolved is None:
+            self.macro.render(context)
 
         # add all of use_macros kwargs into context
         for name, default in self.macro.kwresolved.items():

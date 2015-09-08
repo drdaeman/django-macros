@@ -250,6 +250,25 @@ class MacrosTests(TestCase):
     TEST_LOADMACROS_TAG = (
         "{% loadmacros 'macros/tests/testmacros.html' %}"
         "{% use_macro test_macro 'foo' 'bar' %}")
+    TEST_UNRENDERED_MACROS = (
+        "{% extends 'macros/tests/testmacros_base.html' %}"
+        "{% load macros %}"
+        "{% macro test_macro1 arg %}"
+            "test1:{{ arg }};"
+        "{% endmacro %}"
+        "{% macro test_macro2 arg='default' %}"
+            "test2:{{ arg }};"
+        "{% endmacro %}"
+        "{% macro test_macro3 arg=foo %}"
+            "test3:{{ arg }};"
+        "{% endmacro %}"
+        "{% block content %}"
+            "{% use_macro test_macro1 foo %}"
+            "{% use_macro test_macro2 arg=bar %}"
+            "{% use_macro test_macro3 arg=baz %}"
+            "{% use_macro test_macro2 %}"
+            "{% use_macro test_macro3 %}"
+        "{% endblock %}")
     # define a macro
     MACRO1_DEFINITION = (
         "{% macro macro1 first_arg second_arg first_kwarg=''"
@@ -362,6 +381,8 @@ class MacrosTests(TestCase):
         "{% endmacro_block %}")
     MACRO3_WITH_VARIABLE_RENDERED = "bar;"
     FOO_VALUE = "bar"
+    FOO_VALUE2 = "baz"
+    FOO_VALUE3 = "xyz"
     # test using a context variable to define a macro default
     MACRO4_DEFINITION = (
         "{% macro macro4 kwarg=foo %}"
@@ -452,7 +473,19 @@ class MacrosTests(TestCase):
         # check that the macro renders in the new template
         self.assertEqual(rendered_template,
             "arg1: foo;arg2: bar;kwarg1: default;")
-    
+
+    def test_macros_outside_of_blocks_works(self):
+        """ If macros is outside of any blocks (the current template
+        extends some base one), the macro should still work.
+        """
+        t = Template(self.TEST_UNRENDERED_MACROS)
+        c = Context({
+            "foo": self.FOO_VALUE,
+            "bar": self.FOO_VALUE2,
+            "baz": self.FOO_VALUE3})
+        self.assertEqual(t.render(c),
+            "test1:bar;test2:baz;test3:xyz;test2:default;test3:bar;")
+
     ## test macro, use_macro, and macro_block
     def test_macro_sets_in_parser(self):
         """ check that the macro tag actually sets
