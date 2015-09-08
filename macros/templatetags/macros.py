@@ -52,8 +52,8 @@ class DefineMacroNode(template.Node):
         # variables.
         #
         # recall all defaults are template variables
-        self.kwargs = {k: v.resolve(context)
-                       for k, v in self.kwargs.items()}
+        self.kwresolved = {k: v.resolve(context)
+                           for k, v in self.kwargs.items()}
 
         # empty string - {% macro %} tag has no output
         return ''
@@ -202,7 +202,7 @@ class UseMacroNode(template.Node):
                 context[arg] = ""
 
         # add all of use_macros kwargs into context
-        for name, default in self.macro.kwargs.items():
+        for name, default in self.macro.kwresolved.items():
             if name in self.kwargs:
                 context[name] = self.kwargs[name].resolve(context)
             else:
