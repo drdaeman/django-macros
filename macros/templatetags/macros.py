@@ -5,8 +5,8 @@
 # modified for args and kwargs by Skylar Saveland http://skyl.org
 #
 # updated for django 1.6, modified, and packaged by Nicholas Lourie,
-# while working for kozbox, llc. http://kozbox.com. Since updated for 
-# django 1.8 with various other improvements by numerous contributors, 
+# while working for kozbox, llc. http://kozbox.com. Since updated for
+# django 1.8 with various other improvements by numerous contributors,
 # see https://github.com/nalourie/django-macros/ for details.
 
 """ Macros.py, part of django-macros, allows for creation of
@@ -138,7 +138,7 @@ class LoadMacrosNode(template.Node):
         for macro in self.macros:
             macro.render(context)
 
-        ## empty string - {% loadmacros %} tag does no output
+        # empty string - {% loadmacros %} tag does no output
         return ''
 
 
@@ -313,8 +313,9 @@ def do_macro_block(parser, token):
     # (we could do this more semantically, but we loop
     # only once like this as an optimization).
     for node in nodelist:
-        if isinstance(node, MacroArgNode) and not isinstance(node, MacroKwargNode):
-            # note that MacroKwargNode is also a MacroArgNode (via inheritance),
+        if isinstance(node, MacroArgNode) \
+                and not isinstance(node, MacroKwargNode):
+            # note that MacroKwargNode is also a MacroArgNode (via inheritance)
             # so we must check against this.
             args.append(node)
         elif isinstance(node, MacroKwargNode):
@@ -338,9 +339,11 @@ def do_macro_block(parser, token):
                     "{0} template tag was supplied with a "
                     "keyword argument not defined by the {1} macro.".format(
                         tag_name, macro_name))
-        # The following is a check that only whitespace is inside the macro_block tag,
-        # but it's currently removed for reasons of backwards compatibility/potential 
-        # uses people might have to put extra stuff in te macro_block tag.
+        # The following is a check that only whitespace is
+        # inside the macro_block tag, but it's currently removed for
+        # reasons of backwards compatibility/potential uses people might
+        # have to put extra stuff in te macro_block tag.
+        #
         # elif not isinstance(node, template.TextNode) or node.s.strip() != "":
         #     # whitespace is allowed, anything else is not
         #     raise template.TemplateSyntaxError(

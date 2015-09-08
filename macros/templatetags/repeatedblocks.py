@@ -6,8 +6,8 @@ and explicit repetition of block tags in django templates.
 """
 
 from django import template
-from django.template.loader_tags import BlockNode, do_block
-from django.conf import settings
+from django.template.loader_tags import do_block
+
 
 register = template.Library()
 
