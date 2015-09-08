@@ -396,6 +396,8 @@ class MacrosTests(TestCase):
         "value;")
     MACRO4_WITHOUT_VALUE_RENDERED = (
         "bar;")
+    MACRO4_WITHOUT_VALUE_RENDERED2 = (
+        "baz;")
     # test defining a macro with no args or kwargs
     MACRO5_DEFINITION = (
         "{% macro macro5 %}"
@@ -695,9 +697,12 @@ class MacrosTests(TestCase):
         """
         t = Template(self.LOAD_MACROS + self.MACRO4_DEFINITION +
             self.USE_MACRO4_WITH_VALUE + self.USE_MACRO4_WITHOUT_VALUE)
-        c = Context({'foo': self.FOO_VALUE})
-        self.assertEqual(t.render(c), self.MACRO4_WITH_VALUE_RENDERED +
+        c1 = Context({'foo': self.FOO_VALUE})
+        c2 = Context({'foo': self.FOO_VALUE2})
+        self.assertEqual(t.render(c1), self.MACRO4_WITH_VALUE_RENDERED +
             self.MACRO4_WITHOUT_VALUE_RENDERED)
+        self.assertEqual(t.render(c2), self.MACRO4_WITH_VALUE_RENDERED +
+            self.MACRO4_WITHOUT_VALUE_RENDERED2)
 
     def test_default_template_variables_set_at_definition(self):
         """ when a macro tag uses a template variable to
