@@ -244,9 +244,9 @@ def parse_macro_params(token):
     # class, but use regex here so that validation could
     # be added in future if necessary.
     kwarg_regex = (
-        r'^([A-Za-z_][\w_]*)=(".*"|{0}.*{0}|[A-Za-z_][\w_]*)$'.format(
+        r'^([A-Za-z_][\w_]*)=(".*"|{0}.*{0}|[A-Za-z_][\w_\.]*)$'.format(
             "'"))
-    arg_regex = r'^([A-Za-z_][\w_]*|".*"|{0}.*{0}|(\d+))$'.format(
+    arg_regex = r'^([A-Za-z_][\w_\.]*|".*"|{0}.*{0}|(\d+))$'.format(
         "'")
     for value in values:
         # must check against the kwarg regex first
